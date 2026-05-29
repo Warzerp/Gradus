@@ -1,0 +1,19 @@
+# CODEOWNERS — Revisores requeridos por área
+# Formato: patrón   @usuario-o-equipo
+#
+# Reemplaza los nombres de usuario con los reales del equipo.
+
+# ── Backend (Java / Spring Boot) ────────────────────────────────────────────
+/backend/                   @backend-team
+
+# ── Frontend (React / Vite) ─────────────────────────────────────────────────
+/frontend/src/              @frontend-team
+
+# ── Base de Datos (SQL / Migraciones) ───────────────────────────────────────
+/db/                        @db-team
+
+# ── Configuración de CI/CD y GitHub ─────────────────────────────────────────
+/.github/                   @backend-team @frontend-team
+
+# ── Colección de pruebas API ─────────────────────────────────────────────────
+/*.postman_collection.json  @backend-team
