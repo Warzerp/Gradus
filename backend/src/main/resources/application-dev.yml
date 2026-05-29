@@ -1,0 +1,17 @@
+# Override de configuración para entorno local de desarrollo
+# Este archivo NO debe subirse a producción
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/buscador_semantico
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+
+app:
+  jwt:
+    # En desarrollo se puede usar un secret fijo (mínimo 32 caracteres = 256 bits)
+    secret: dev-secret-key-do-not-use-in-production-min-256-bits
+  cors:
+    allowed-origins: http://localhost:5173
