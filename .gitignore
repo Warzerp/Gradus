@@ -11,6 +11,8 @@ backend/.env
 # ── Frontend ──────────────────────────────────────────────────────────────────
 frontend/node_modules/
 frontend/dist/
+frontend/dist-ssr/
+frontend/coverage/
 frontend/.env.local
 frontend/.env.*.local
 
@@ -27,7 +29,9 @@ frontend/.env.*.local
 .DS_Store
 Thumbs.db
 
-# ── Secretos ─────────────────────────────────────────────────────────────────
-*.env
+# ── Secrets — env files (never commit real credentials) ──────────────────────
+# Block all .env variants except the public template
 .env
-!.env.example
+.env.local
+.env.*.local
+!**/.env.example
