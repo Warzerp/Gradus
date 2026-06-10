@@ -61,7 +61,7 @@ export default function GestionAutores() {
           <tbody className="divide-y divide-gray-200">
             {autoresPaginados.map((autor) => (
               <tr key={autor.id}>
-                <td className="px-6 py-4 text-sm text-gray-900">{autor.name || autor.nombre}</td>
+                <td className="px-6 py-4 text-sm text-gray-900">{autor.nombre}</td>
                 <td className="px-6 py-4 text-sm text-gray-500">{autor.documento}</td>
                 <td className="px-6 py-4 text-sm">
                   {/* Criterio: Muestra estado Inactivo en la UI */}
@@ -113,7 +113,7 @@ export default function GestionAutores() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-xl">
             <h2 className="text-xl font-bold mb-4">Editar Autor</h2>
-            <form onSubmit={guardarChanges || guardarCambios} className="space-y-4">
+            <form onSubmit={guardarCambios} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">Nombre</label>
                 <input 

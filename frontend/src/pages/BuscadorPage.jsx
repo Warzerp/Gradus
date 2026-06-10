@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react';
 
+const baseDatosDocumentos = [
+  { id: 1, titulo: "Optimización de algoritmos en redes neuronales", facultad: "Ingeniería", anio: "2026", linea: "Inteligencia Artificial", score: 98, resumen: "Este proyecto analiza la optimización de algoritmos avanzados para el entrenamiento rápido de redes neuronales orientadas al procesamiento de imágenes." },
+  { id: 2, titulo: "Desarrollo de interfaces web con React y Tailwind", facultad: "Ingeniería", anio: "2025", linea: "Desarrollo de Software", score: 85, resumen: "Estudio sobre el impacto del desarrollo de interfaces modernas usando React, analizando componentes reactivos y estilos eficientes." },
+  { id: 3, titulo: "Análisis de Big Data en el sector salud", facultad: "Salud", anio: "2026", linea: "Ciencia de Datos", score: 92, resumen: "Implementación de modelos de procesamiento distribuido para el análisis masivo de datos clínicos y predicción de patologías." },
+  { id: 4, titulo: "Metodologías ágiles en equipos remotos de software", facultad: "Ingeniería", anio: "2024", linea: "Gestión de Proyectos", score: 74, resumen: "Evaluación de metodologías como Scrum en entornos de desarrollo de software con equipos completamente distribuidos." }
+];
+
 export default function BuscadorPage() {
   // 1. Estados para la búsqueda y filtros
   const [busqueda, setBusqueda] = useState('');
   const [sugerencias, setSugerencias] = useState([]);
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
-  
+
   const [filtros, setFiltros] = useState({
     facultad: '',
     anio: '',
     linea: ''
   });
-
-  // Base de datos simulada para el buscador
-  const baseDatosDocumentos = [
-    { id: 1, titulo: "Optimización de algoritmos en redes neuronales", facultad: "Ingeniería", anio: "2026", linea: "Inteligencia Artificial", score: 98, resumen: "Este proyecto analiza la optimización de algoritmos avanzados para el entrenamiento rápido de redes neuronales orientadas al procesamiento de imágenes." },
-    { id: 2, titulo: "Desarrollo de interfaces web con React y Tailwind", facultad: "Ingeniería", anio: "2025", linea: "Desarrollo de Software", score: 85, resumen: "Estudio sobre el impacto del desarrollo de interfaces modernas usando React, analizando componentes reactivos y estilos eficientes." },
-    { id: 3, titulo: "Análisis de Big Data en el sector salud", facultad: "Salud", anio: "2026", linea: "Ciencia de Datos", score: 92, resumen: "Implementación de modelos de procesamiento distribuido para el análisis masivo de datos clínicos y predicción de patologías." },
-    { id: 4, titulo: "Metodologías ágiles en equipos remotos de software", facultad: "Ingeniería", anio: "2024", linea: "Gestión de Proyectos", score: 74, resumen: "Evaluación de metodologías como Scrum en entornos de desarrollo de software con equipos completamente distribuidos." }
-  ];
 
   const [resultados, setResultados] = useState(baseDatosDocumentos);
 
