@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,6 +28,8 @@ public class SecurityConfig {
         return http
                 // CSRF deshabilitado — API REST stateless no necesita protección CSRF
                 .csrf(AbstractHttpConfigurer::disable)
+                // CORS: usa el bean CorsConfigurationSource definido en CorsConfig
+                .cors(Customizer.withDefaults())
                 // Session STATELESS — el estado vive en el JWT, no en servidor
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

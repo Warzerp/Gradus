@@ -8,6 +8,8 @@ import { PrivateRoute } from './PrivateRoute';
 import { LoginPage }    from '../pages/auth/LoginPage';
 import { RegisterPage } from '../pages/auth/RegisterPage';
 import { DashboardPage } from '../pages/dashboard/DashboardPage';
+import GestionAutores   from '../pages/AutoresPage';
+import BuscadorPage     from '../pages/BuscadorPage';
 import { useAuth }      from '../hooks/useAuth';
 
 function RootRedirect() {
@@ -32,7 +34,8 @@ export function AppRouter() {
       {/* Rutas privadas */}
       <Route element={<PrivateRoute />}>
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/buscar"    element={<DashboardPage />} />
+        <Route path="/buscar"    element={<BuscadorPage />} />
+        <Route path="/autores"   element={<GestionAutores />} />
       </Route>
 
       {/* Fallback */}

@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Map<String, Object>> handleAuthenticationException(
             AuthenticationException ex) {
-        return buildResponse(HttpStatus.UNAUTHORIZED, "No autenticado", null);
+        return buildResponse(HttpStatus.UNAUTHORIZED, "Credenciales inválidas. Inténtelo de nuevo.", null);
     }
 
     // ─── 403 Forbidden ───────────────────────────────────────────────────────

@@ -54,7 +54,7 @@ export function DashboardPage() {
             Rol: <span className="font-medium text-brand-500">{user?.rol}</span>
           </p>
           <p className="text-sm text-gray-400 dark:text-gray-500 mt-4">
-            El buscador semántico estará disponible en el Sprint 2.
+            El buscador semántico estará disponible en el Sprint 3.
           </p>
         </div>
       </main>
