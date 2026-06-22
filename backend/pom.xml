@@ -82,6 +82,33 @@
             <version>${mapstruct.version}</version>
         </dependency>
 
+        <!-- ── PDF ──────────────────────────────────────────── -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <!-- ── CSV export ───────────────────────────────────── -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.9</version>
+        </dependency>
+
+        <!-- ── Flyway ───────────────────────────────────────── -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+
+        <!-- ── dotenv (carga .env automáticamente en dev) ──── -->
+        <dependency>
+            <groupId>me.paulschwarz</groupId>
+            <artifactId>spring-dotenv</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
         <!-- ── Test ─────────────────────────────────────────── -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

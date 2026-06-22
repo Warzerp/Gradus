@@ -5,11 +5,15 @@ import com.buscador.semantico.trabajogrado.TrabajoGrado;
 import com.buscador.semantico.trabajogrado.TrabajoGradoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,37 +58,19 @@ public class PdfService {
 
     private String extraerTexto(MultipartFile file) {
         String contentType = file.getContentType();
-        try {
-            byte[] bytes = file.getBytes();
+        try (InputStream is = file.getInputStream()) {
             if (contentType != null && contentType.startsWith("text/")) {
-                return new String(bytes, StandardCharsets.UTF_8);
+                return new String(file.getBytes(), StandardCharsets.UTF_8);
             }
-            // Extracción básica de texto visible de PDF (sin librería externa)
-            String raw = new String(bytes, StandardCharsets.ISO_8859_1);
-            return extraerTextoPdf(raw);
+            // Usa PDFBox para extracción real del texto del PDF (API 3.x)
+            try (PDDocument doc = Loader.loadPDF(file.getBytes())) {
+                PDFTextStripper stripper = new PDFTextStripper();
+                stripper.setSortByPosition(true);
+                return stripper.getText(doc);
+            }
         } catch (IOException e) {
             throw ApiException.badRequest("No se pudo leer el archivo: " + e.getMessage());
         }
-    }
-
-    /**
-     * Extrae texto legible de un PDF usando expresiones regulares sobre el contenido bruto.
-     * Funciona para PDFs sin cifrado con texto sin codificación especial.
-     */
-    private String extraerTextoPdf(String raw) {
-        StringBuilder sb = new StringBuilder();
-        // Busca bloques BT...ET (Begin Text / End Text) de PDF
-        Pattern btEt = Pattern.compile("BT\\s(.*?)ET", Pattern.DOTALL);
-        Matcher m = btEt.matcher(raw);
-        while (m.find()) {
-            String block = m.group(1);
-            // Extrae texto dentro de paréntesis (operador Tj) o corchetes (TJ)
-            Pattern tj = Pattern.compile("\\(([^)]+)\\)\\s*Tj");
-            Matcher tm = tj.matcher(block);
-            while (tm.find()) sb.append(tm.group(1)).append(" ");
-        }
-        String resultado = sb.toString().trim();
-        return resultado.isEmpty() ? raw.replaceAll("[^\\x20-\\x7E\\n]", " ").trim() : resultado;
     }
 
     private TextoCompleto parsearSecciones(String texto, Long trabajoId) {
@@ -110,7 +96,7 @@ public class PdfService {
 
     private void actualizarResumenTrabajo(Long trabajoId, String resumen) {
         if (resumen == null) return;
-        trabajoRepository.findById(trabajoId).ifPresent(t -> {
+        trabajoRepository.findById(trabajoId).ifPresent((TrabajoGrado t) -> {
             if (t.getResumen() == null) {
                 t.setResumen(resumen.length() > 500 ? resumen.substring(0, 500) + "..." : resumen);
                 trabajoRepository.save(t);

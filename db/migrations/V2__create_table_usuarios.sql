@@ -1,7 +1,10 @@
 -- V2: Tabla de usuarios del sistema
-CREATE TYPE rol_usuario AS ENUM ('ADMIN', 'BIBLIOTECARIO', 'DOCENTE', 'ESTUDIANTE');
+DO $$ BEGIN
+    CREATE TYPE rol_usuario AS ENUM ('ADMIN', 'BIBLIOTECARIO', 'DOCENTE', 'ESTUDIANTE');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
-CREATE TABLE usuarios (
+CREATE TABLE IF NOT EXISTS usuarios (
     id             BIGSERIAL    PRIMARY KEY,
     nombre         VARCHAR(150) NOT NULL,
     email          VARCHAR(255) NOT NULL UNIQUE,

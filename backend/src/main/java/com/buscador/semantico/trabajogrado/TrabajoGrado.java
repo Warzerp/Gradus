@@ -46,6 +46,12 @@ public class TrabajoGrado {
     @Column(name = "url_pdf", columnDefinition = "TEXT")
     private String urlPdf;
 
+    @Column(name = "es_privado", nullable = false)
+    private boolean esPrivado = false;
+
+    @Column(name = "texto_cifrado", columnDefinition = "TEXT")
+    private String textoCifrado;
+
     // embedding (vector) gestionado por EmbeddingService vía JDBC nativo
     @Transient
     private float[] embedding;

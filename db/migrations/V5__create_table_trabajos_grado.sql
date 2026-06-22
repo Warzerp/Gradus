@@ -1,7 +1,10 @@
 -- V5: Tabla principal de trabajos de grado con soporte para embeddings vectoriales
-CREATE TYPE estado_trabajo AS ENUM ('BORRADOR', 'EN_REVISION', 'PUBLICADO', 'PRIVADO');
+DO $$ BEGIN
+    CREATE TYPE estado_trabajo AS ENUM ('BORRADOR', 'EN_REVISION', 'PUBLICADO', 'PRIVADO');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
-CREATE TABLE trabajos_grado (
+CREATE TABLE IF NOT EXISTS trabajos_grado (
     id               BIGSERIAL      PRIMARY KEY,
     titulo           VARCHAR(500)   NOT NULL,
     resumen          TEXT,

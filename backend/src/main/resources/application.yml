@@ -1,5 +1,12 @@
 server:
   port: 8080
+  ssl:
+    enabled: ${SSL_ENABLED:false}
+    key-store: ${SSL_KEYSTORE_PATH:classpath:keystore.p12}
+    key-store-password: ${SSL_KEYSTORE_PASSWORD:changeit}
+    key-store-type: PKCS12
+    protocol: TLS
+    enabled-protocols: TLSv1.3
 
 spring:
   datasource:
@@ -27,6 +34,8 @@ app:
     refresh-expiration-ms: 86400000
   cors:
     allowed-origins: ${CORS_ORIGINS:http://localhost:5173}
+  cifrado:
+    clave-base64: ${AES_KEY_BASE64:}
 
 openai:
   api-key: ${OPENAI_API_KEY:}

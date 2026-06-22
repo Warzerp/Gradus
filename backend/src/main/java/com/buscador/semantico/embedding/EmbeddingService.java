@@ -4,9 +4,15 @@ import com.buscador.semantico.exception.ApiException;
 import com.buscador.semantico.trabajogrado.TrabajoGradoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+
+import javax.net.ssl.*;
+import java.net.http.HttpClient;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 
 import java.util.List;
 import java.util.Map;
@@ -33,7 +39,29 @@ public class EmbeddingService {
         this.apiKey = apiKey;
         this.model = model;
         this.url = url;
-        this.restClient = RestClient.create();
+        this.restClient = buildTrustAllRestClient();
+    }
+
+    private static RestClient buildTrustAllRestClient() {
+        try {
+            TrustManager[] trustAll = new TrustManager[]{
+                new X509TrustManager() {
+                    public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+                    public void checkClientTrusted(X509Certificate[] c, String a) {}
+                    public void checkServerTrusted(X509Certificate[] c, String a) {}
+                }
+            };
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, trustAll, new SecureRandom());
+            HttpClient httpClient = HttpClient.newBuilder()
+                    .sslContext(sslContext)
+                    .build();
+            return RestClient.builder()
+                    .requestFactory(new JdkClientHttpRequestFactory(httpClient))
+                    .build();
+        } catch (Exception e) {
+            throw new RuntimeException("No se pudo crear el RestClient con SSL personalizado", e);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -77,6 +105,10 @@ public class EmbeddingService {
                 + " " + (trabajo.getResumen() != null ? trabajo.getResumen() : "");
         float[] embedding = generarEmbedding(texto.strip());
         guardarEmbedding(trabajoId, embedding);
+    }
+
+    public boolean isConfigured() {
+        return apiKey != null && !apiKey.isBlank();
     }
 
     public float[] obtenerEmbeddingTexto(String texto) {

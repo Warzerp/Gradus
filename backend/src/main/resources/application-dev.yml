@@ -8,6 +8,10 @@ spring:
     password: jojo17935
   jpa:
     show-sql: true
+  flyway:
+    locations: filesystem:../db/migrations
+    baseline-on-migrate: true
+    baseline-version: 14
 
 app:
   jwt:

@@ -1,5 +1,5 @@
 -- V3: Tabla de autores (la FK a catalogos se agrega en V10)
-CREATE TABLE autores (
+CREATE TABLE IF NOT EXISTS autores (
     id          BIGSERIAL    PRIMARY KEY,
     nombre      VARCHAR(150) NOT NULL,
     apellido    VARCHAR(150) NOT NULL,

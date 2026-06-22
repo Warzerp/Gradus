@@ -1,0 +1,63 @@
+services:
+
+  # ── PostgreSQL con pgvector ──────────────────────────────────────────────────
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: gradus_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       buscador_semantico
+      POSTGRES_USER:     ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASS:-postgres}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db/migrations:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d buscador_semantico"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Backend Spring Boot ──────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: gradus_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL:           jdbc:postgresql://db:5432/buscador_semantico
+      DB_USER:          ${DB_USER:-postgres}
+      DB_PASS:          ${DB_PASS:-postgres}
+      JWT_SECRET:       ${JWT_SECRET}
+      OPENAI_API_KEY:   ${OPENAI_API_KEY:-}
+      CORS_ORIGINS:     ${CORS_ORIGINS:-http://localhost}
+      AES_KEY_BASE64:   ${AES_KEY_BASE64:-}
+      SSL_ENABLED:      "false"
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Frontend React/Nginx ─────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: gradus_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  db_data:

@@ -1,6 +1,6 @@
 -- V8: Similitud conceptual entre pares de trabajos de grado
 -- CHECK garantiza que trabajo_a_id < trabajo_b_id para evitar pares duplicados invertidos
-CREATE TABLE similitud_conceptual (
+CREATE TABLE IF NOT EXISTS similitud_conceptual (
     id              BIGSERIAL    PRIMARY KEY,
     trabajo_a_id    BIGINT       NOT NULL REFERENCES trabajos_grado(id),
     trabajo_b_id    BIGINT       NOT NULL REFERENCES trabajos_grado(id),
